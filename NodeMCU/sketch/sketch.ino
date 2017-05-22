@@ -12,8 +12,6 @@ String server_host = "Host: 192.168.1.244\r\n\r\n";
 
 String room_id = "1";
 int state = 1;
-int pin_switch = 8;
-int pin_led = 7;
 
 String myURL(String n_status){
     String new_path = get_path + "?id=\"" + room_id + "\"&status=\"" + n_status + "\"" + param + server_host;
@@ -28,6 +26,8 @@ const long interval = 10000;
 
 void setup() 
 {
+    pinMode(D8, INPUT);
+    pinMode(D7, OUTPUT);
     Serial.begin(115200); 
     delay(10);
     Serial.println();
@@ -60,15 +60,26 @@ void loop() {
           String line = client.readStringUntil('\n');
           Serial.println(line);
     }
+
+    Serial.println("Read Value"); 
+    int read_val = digitalRead(D8);
     
     unsigned long currentMillis = millis();
-    if(currentMillis - previousMillis >= interval)
-    {
-        previousMillis = currentMillis;
-        Client_Request();
-    }  
+    if(read_val != state){
+      state = read_val;
+      if(read_val == 1){
+        Serial.println("SWITCH ON");
+        digitalWrite(D7, HIGH);
+      }
+      else{
+        Serial.println("SWITCH OFF"); 
+        digitalWrite(D7, LOW);
+      }
+      Client_Request(read_val);
+    }
+    delay(2000);
 }
-void Client_Request()
+void Client_Request(int status_led)
 {
     Serial.println("Connect TCP Server");
     int cnt=0;
@@ -82,7 +93,13 @@ void Client_Request()
     } 
     Serial.println("Success");
     delay(500);
-    client.print(myURL("ON"));
-    Serial.print(myURL("ON"));
+    if(status_led==1){
+      client.print(myURL("ON"));
+      Serial.print(myURL("ON"));
+    }
+    else{
+      client.print(myURL("OFF"));
+      Serial.print(myURL("OFF"));
+    }
     delay(100);
 }
