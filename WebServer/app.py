@@ -1,7 +1,7 @@
 #################################################################
 ##     Electric Usage Conditioner Monitoring - Web Server      ##
 #################################################################
-from flask import Flask
+from flask import Flask, request
 import time
 
 app = Flask(__name__)
@@ -12,9 +12,9 @@ def Index():
 
 @app.route('/updatestatus', methods=['POST'])
 def UpdateStatus():
-    room_id = request.form.get('id')
-    status = request.form.get('status')
-    return 'Update status'
+    room_id = request.args.get('id', '')
+    status = request.args.get('status', '')
+    return 'Room {}: Update status -to->{}'.format(room_id, status)
 
 #+-----------------------------------------------------+#
 #|                  Start-Up Statement                 +#

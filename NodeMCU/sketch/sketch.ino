@@ -6,9 +6,19 @@ const char* password = "YOUR_WIFI_PASSWORD";
 
 const char* server_ip = "192.168.1.244";
 
-String get_path = "GET /";
+String get_path = "POST /updatestatus";
 String param = " HTTP/1.1\r\n";
 String server_host = "Host: 192.168.1.244\r\n\r\n";
+
+String room_id = "1";
+int state = 1;
+int pin_switch = 8;
+int pin_led = 7;
+
+String myURL(String n_status){
+    String new_path = get_path + "?id=\"" + room_id + "\"&status=\"" + n_status + "\"" + param + server_host;
+    return new_path;
+}
 
 WiFiServer server(SERVER_PORT);
 WiFiClient client;
@@ -72,7 +82,7 @@ void Client_Request()
     } 
     Serial.println("Success");
     delay(500);
-    client.print(get_path+param+server_host);
-    Serial.print(get_path+param+server_host);
+    client.print(myURL("ON"));
+    Serial.print(myURL("ON"));
     delay(100);
 }
