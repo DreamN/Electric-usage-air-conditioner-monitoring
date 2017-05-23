@@ -1,4 +1,5 @@
 import datetime
+import psycopg2
 
 from sqlalchemy import Column, ForeignKey, Integer, String, DateTime, Boolean
 from sqlalchemy.ext.declarative import declarative_base
