@@ -38,6 +38,33 @@ def UpdateStatus():
     a_status = request.args.get('aircon', '')
     return 'Room {}: Update status -to->{} and AIRCON\"{}\"'.format(room_id, status, a_status)
 
+@app.route('/register', methods=['GET', 'POST'])
+def RegisterPage():
+    if request.method == 'POST':
+        deviceid = request.form.get('deviceid').lower()
+        if(deviceid == ""):
+            noti = {
+                        'type': 'is-danger',
+                        'content': 'Please enter device is (You\'re not entered your device id)'
+                }
+        else:
+            try:
+                device = session.query(Device).filter_by(id = deviceid).one()
+                noti = {
+                        'type': 'is-danger',
+                        'content': 'The Deivce is \"' + deviceid + '\" is already exist please enter new device id'
+                }
+            except:
+                d = Device(deviceid)
+                session.add(d)
+                session.commit()
+                noti = {
+                            'type': 'is-success',
+                            'content': 'Your device ID \"' + deviceid + '\" is registered successfully'
+                    }
+        return render_template('register.html', noti=noti)
+    return render_template('register.html')
+
 #+-----------------------------------------------------+#
 #|                  Start-Up Statement                 +#
 #+-----------------------------------------------------+#

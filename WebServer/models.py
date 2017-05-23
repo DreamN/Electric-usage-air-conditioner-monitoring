@@ -1,7 +1,6 @@
 import datetime
 import psycopg2
-
-from sqlalchemy import Column, ForeignKey, Integer, String, DateTime, Boolean
+from sqlalchemy import Column, ForeignKey, Integer, String, DateTime, Boolean, BigInteger
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy import create_engine
@@ -14,13 +13,17 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
-class CurrentState(Base):
-    __tablename__ = 'current_state'
-    id = Column(String(10), primary_key=True)
+class Device(Base):
+    __tablename__ = 'device'
+    id = Column(String(20), primary_key=True)
     status = Column(Boolean, default=False)
     aircon = Column(Boolean, default=False)
-    totalTime = Column(DateTime, default = (0, 0, 0, 0, 0, 0, 0))
+    totalTime = Column(BigInteger, default = 0)
     last_update = Column(DateTime, default = datetime.datetime.utcnow)
+
+    def __init__(self, id):
+        print('Registed device id : ' + id)
+        self.id = id
 
     def update(self, status, aircon):
         self.status = status
@@ -29,3 +32,6 @@ class CurrentState(Base):
             timediff = datetime.datetime.utcnow - self.last_update
             self.totalTime += timediff
         self.last_update = datetime.datetime.utcnow
+
+
+Base.metadata.create_all(engine)

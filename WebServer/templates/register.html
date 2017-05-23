@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Register{% endblock %}
+{% block content %}
+    <h1 class="title is-1">
+        Register: Electric Usage Conditioner Monitoring System
+    </h1>
+    <div class="box">
+        <div>
+            <form method="POST">
+              
+              
+                <div class="field">
+                    <label class="label">Device ID</label>
+                    <p class="control">
+                        <input class="input" type="text" placeholder="My Device ID" name="deviceid">
+                    </p>
+                </div>
+                <br>
+                <div class="field">
+                    <p class="control">
+                        <label class="checkbox">
+                        <input type="checkbox">
+                        I agree to the <a href="#">terms and conditions</a>
+                        </label>
+                    </p>
+                </div>
+                <br>
+                <div class="field">
+                    <p class="control">
+                        <button class="button is-primary">Submit</button>
+                    </p>
+                </div>
+
+
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

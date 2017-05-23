@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title%}{% endblock %}: EUCM</title>
+  <link rel="stylesheet" href="/css/bulma.css">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <section class="hero is-default is-bold">
+    <div class="hero-head topbar">
+      <div class="container">
+        <nav class="nav has-shadow">
+          <div class="container">
+            <div class="nav-left">
+              <a class="nav-item" href="./">
+                <span class="logo">Electric Usage Conditioner Monitoring</span>
+              </a>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </div>
+    {% if noti %}
+    <div class="notification {{noti.type}}">
+      {{noti.content}}
+    </div>
+    <br>
+    <br>
+    {% else %}
+    <br><br><br>
+    {% endif %}
+  </section>
+  <div class="container">
+    {% block content%}
+    {% endblock %}
+  </div>
+  <script src="./js/jquery-3.1.1.min.js" type="text/javascript"></script>
+  <script src="./js/index.js" type="text/javascript"></script>
+</body>
+</html>
