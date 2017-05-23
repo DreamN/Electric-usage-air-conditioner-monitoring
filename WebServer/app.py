@@ -1,10 +1,31 @@
 #################################################################
 ##     Electric Usage Conditioner Monitoring - Web Server      ##
 #################################################################
-from flask import Flask, request
+import sys
+sys.path.insert(0, '../')
+from flask import Flask, request, send_from_directory, render_template
+from models import *
+import psycopg2
 import time
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='statics')
+
+
+#+-----------------------------------------------------+#
+#|                  Static file's URL                  +#
+#+-----------------------------------------------------+#
+
+@app.route('/js/<path:path>')
+def send_js(path):
+    return send_from_directory(app.static_folder + '/js', path)
+
+@app.route('/css/<path:path>')
+def send_css(path):
+    return send_from_directory(app.static_folder + '/css', path)
+
+#+-----------------------------------------------------+#
+#|                  Webserver's Views                  +#
+#+-----------------------------------------------------+#
 
 @app.route('/')
 def Index():
