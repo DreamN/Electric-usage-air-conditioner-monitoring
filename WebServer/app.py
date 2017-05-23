@@ -34,10 +34,15 @@ def Index():
 
 @app.route('/updatestatus', methods=['POST'])
 def UpdateStatus():
-    room_id = request.args.get('id', '')
-    status = request.args.get('status', '')
-    a_status = request.args.get('aircon', '')
-    return 'Room {}: Update status -to->{} and AIRCON\"{}\"'.format(room_id, status, a_status)
+    deviceid = request.args.get('id').lower()
+    status = request.args.get('status').lower()
+    a_status = request.args.get('aircon').lower()
+    try:
+        device = session.query(Device).get(deviceid)
+        print('Room {}: Update status -to->{} and AIRCON\"{}\"'.format(deviceid, status, a_status))
+        return(str(device.last_update))
+    except:
+        return "Your Device \"{}\" is not registered, please register it add url/register "
 
 @app.route('/register', methods=['GET', 'POST'])
 def RegisterPage():

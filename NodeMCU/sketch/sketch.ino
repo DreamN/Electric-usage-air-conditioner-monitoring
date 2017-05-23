@@ -15,7 +15,7 @@ int state = 0;
 int state_a = 0;
 
 String myURL(String n_status, String a_status){
-    String new_path = get_path + "?id=\"" + room_id + "\"&status=\"" + n_status + "\"&aircon=\"" + a_status + "\"" + param + server_host;
+    String new_path = get_path + "?id=" + room_id + "&status=" + n_status + "&aircon=" + a_status + param + server_host;
     return new_path;
 }
 
