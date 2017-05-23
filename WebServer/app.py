@@ -29,7 +29,8 @@ def send_css(path):
 
 @app.route('/')
 def Index():
-    return 'Electric Usage Conditioner Monitoring - Web Server'
+    devices = session.query(Device).all()
+    return render_template('index.html', devices=devices)
 
 @app.route('/updatestatus', methods=['POST'])
 def UpdateStatus():

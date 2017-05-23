@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+    <h1 class="title is-1">
+        Dashboard: EUCM
+    </h1>
+    <div class="box">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Device ID</th>
+                    <th>Status</th>
+                    <th>Aircon</th>
+                    <th>Total Aircon Usage(minutes)</th>
+                    <th>Last Updates</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if devices %}
+                    {% for d in devices %}
+                    <tr>
+                        <td>{{d.id}}</td>
+                        <td>{{d.status}}</td>
+                        <td>{{d.aircon}}</td>
+                        <td>{{d.totalTime}}</td>
+                        <td>{{d.last_update}}</td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td>N/A</td>
+                        <td>N/A</td>
+                        <td>N/A</td>
+                        <td>N/A</td>
+                        <td>N/A</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}
