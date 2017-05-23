@@ -15,7 +15,7 @@ session = DBSession()
 
 
 def dt_to_minutes(dt):
-    days, hours, minutes = t.days, t.seconds // 3600, t.seconds // 60 % 60
+    days, hours, minutes = dt.days, dt.seconds // 3600, dt.seconds // 60 % 60
     return (days*24*60)+(hours*60)+minutes
 
 class Device(Base):
@@ -31,12 +31,23 @@ class Device(Base):
         self.id = id
 
     def update(self, status, aircon):
-        self.status = status
-        self.aircon = aircon
-        if(self.status == False):
+        if(self.status and not status and self.aircon):   #if status on -> off && aircon on $AddTotal
+            print("if status on -> off && aircon on $AddTotal")
             timediff = dt_to_minutes(datetime.datetime.now() - self.last_update)
             self.totalTime += timediff
-        self.last_update = datetime.datetime.now()
+            self.last_update = datetime.datetime.now()
+        elif(self.status and self.aircon and not aircon): #if status on && aircon on -> off $AddTotal
+            print("if status on && aircon on -> off $AddTotal")
+            timediff = dt_to_minutes(datetime.datetime.now() - self.last_update)
+            self.totalTime += timediff
+            self.last_update = datetime.datetime.now()
+        elif(not self.status and status and aircon):      #if status off -> on aircon on then update 
+            print("if aircon on then update ")
+            self.last_update = datetime.datetime.now()
+        self.aircon = aircon
+        self.status = status
+        session.add(self)
+        session.commit()
 
 
 Base.metadata.create_all(engine)

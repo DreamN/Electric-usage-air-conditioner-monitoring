@@ -1,5 +1,5 @@
 #include <ESP8266WiFi.h>
-#define SERVER_PORT 80
+#define SERVER_PORT 8080
 
 const char* ssid     = "YOUR_WIFI_SSID";
 const char* password = "YOUR_WIFI_PASSWORD";

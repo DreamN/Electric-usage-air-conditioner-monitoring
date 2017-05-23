@@ -39,10 +39,13 @@ def UpdateStatus():
     a_status = request.args.get('aircon').lower()
     try:
         device = session.query(Device).get(deviceid)
+        s = True if status == 'on' else False
+        a = True if a_status == 'on' else False
+        device.update(s, a)
         print('Room {}: Update status -to->{} and AIRCON\"{}\"'.format(deviceid, status, a_status))
         return(str(device.last_update))
     except:
-        return "Your Device \"{}\" is not registered, please register it add url/register "
+        return "Your Device \"{}\" is not registered, please register it add url/register".format(deviceid)
 
 @app.route('/register', methods=['GET', 'POST'])
 def RegisterPage():
@@ -75,4 +78,4 @@ def RegisterPage():
 #|                  Start-Up Statement                 +#
 #+-----------------------------------------------------+#
 if __name__ == "__main__":
-    app.run(debug=True, host='0.0.0.0', port=80)
+    app.run(debug=True, host='0.0.0.0', port=8080, threaded=True)
