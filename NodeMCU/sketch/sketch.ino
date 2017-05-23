@@ -72,6 +72,7 @@ void loop() {
       if(read_s_val == 1){
         Serial.println("SWITCH ON");
         digitalWrite(D7, HIGH);
+        digitalWrite(D3, state_a);
       }
       else{
         Serial.println("SWITCH OFF"); 
