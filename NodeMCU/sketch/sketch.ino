@@ -11,10 +11,11 @@ String param = " HTTP/1.1\r\n";
 String server_host = "Host: 192.168.1.244\r\n\r\n";
 
 String room_id = "1";
-int state = 1;
+int state = 0;
+int state_a = 0;
 
-String myURL(String n_status){
-    String new_path = get_path + "?id=\"" + room_id + "\"&status=\"" + n_status + "\"" + param + server_host;
+String myURL(String n_status, String a_status){
+    String new_path = get_path + "?id=\"" + room_id + "\"&status=\"" + n_status + "\"&aircon=\"" + a_status + "\"" + param + server_host;
     return new_path;
 }
 
@@ -26,8 +27,10 @@ const long interval = 10000;
 
 void setup() 
 {
-    pinMode(D8, INPUT);
+    pinMode(D3, OUTPUT);
+    pinMode(D4, INPUT);
     pinMode(D7, OUTPUT);
+    pinMode(D8, INPUT);
     Serial.begin(115200); 
     delay(10);
     Serial.println();
@@ -61,25 +64,48 @@ void loop() {
           Serial.println(line);
     }
 
-    Serial.println("Read Value"); 
-    int read_val = digitalRead(D8);
+    int read_s_val = digitalRead(D8);
+    int read_a_val = digitalRead(D4);
     
-    unsigned long currentMillis = millis();
-    if(read_val != state){
-      state = read_val;
-      if(read_val == 1){
+    if(read_s_val != state){
+      state = read_s_val;
+      if(read_s_val == 1){
         Serial.println("SWITCH ON");
         digitalWrite(D7, HIGH);
       }
       else{
         Serial.println("SWITCH OFF"); 
         digitalWrite(D7, LOW);
+        digitalWrite(D3, LOW);
       }
-      Client_Request(read_val);
+      Client_Request(read_s_val, state_a);
+    }
+    if(read_a_val != state_a){
+      state_a = read_a_val;
+      if(read_a_val == 1){ 
+        digitalWrite(D3, state);
+        if(state == 1){
+          Serial.println("AIRCON ON");
+          Client_Request(read_s_val, state_a);
+        }
+        else{ 
+          Serial.println("CANNOT TURN AIRCON ON/OFF (ON)");
+        }
+      }
+      else{
+        digitalWrite(D3, LOW);
+        if(state == 1){
+          Serial.println("AIRCON OFF");
+          Client_Request(read_s_val, state_a);
+        }
+        else{ 
+          Serial.println("CANNOT TURN AIRCON ON/OFF (OFF)");
+        }
+      } 
     }
     delay(2000);
 }
-void Client_Request(int status_led)
+void Client_Request(int status_led, int status_aircon)
 {
     Serial.println("Connect TCP Server");
     int cnt=0;
@@ -94,12 +120,18 @@ void Client_Request(int status_led)
     Serial.println("Success");
     delay(500);
     if(status_led==1){
-      client.print(myURL("ON"));
-      Serial.print(myURL("ON"));
+      if(status_aircon == 1){
+        client.print(myURL("ON", "ON"));
+        Serial.print(myURL("ON", "ON"));
+      }
+      else{
+        client.print(myURL("ON", "OFF"));
+        Serial.print(myURL("ON", "OFF"));  
+      }
     }
     else{
-      client.print(myURL("OFF"));
-      Serial.print(myURL("OFF"));
+      client.print(myURL("OFF", "OFF"));
+      Serial.print(myURL("OFF", "OFF"));
     }
     delay(100);
 }

@@ -14,7 +14,8 @@ def Index():
 def UpdateStatus():
     room_id = request.args.get('id', '')
     status = request.args.get('status', '')
-    return 'Room {}: Update status -to->{}'.format(room_id, status)
+    a_status = request.args.get('aircon', '')
+    return 'Room {}: Update status -to->{} and AIRCON\"{}\"'.format(room_id, status, a_status)
 
 #+-----------------------------------------------------+#
 #|                  Start-Up Statement                 +#
