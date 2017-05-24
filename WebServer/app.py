@@ -3,7 +3,7 @@
 #################################################################
 import sys
 sys.path.insert(0, '../')
-from flask import Flask, request, send_from_directory, render_template
+from flask import Flask, request, send_from_directory, render_template, jsonify
 from models import *
 import psycopg2
 import time
@@ -47,6 +47,11 @@ def UpdateStatus():
     except:
         return "Your Device \"{}\" is not registered, please register it add url/register".format(deviceid)
 
+@app.route('/json')
+def GetJsonData():
+    devices = session.query(Device).all()
+    return jsonify({device.id : device.serialize for device in devices})
+
 @app.route('/register', methods=['GET', 'POST'])
 def RegisterPage():
     if request.method == 'POST':
@@ -78,4 +83,4 @@ def RegisterPage():
 #|                  Start-Up Statement                 +#
 #+-----------------------------------------------------+#
 if __name__ == "__main__":
-    app.run(debug=True, host='0.0.0.0', port=8080, threaded=True)
+    app.run(debug=True, host='0.0.0.0', port=8080, )#threaded=True)

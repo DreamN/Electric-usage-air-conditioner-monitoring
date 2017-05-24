@@ -18,6 +18,7 @@ def dt_to_minutes(dt):
     days, hours, minutes = dt.days, dt.seconds // 3600, dt.seconds // 60 % 60
     return (days*24*60)+(hours*60)+minutes
 
+
 class Device(Base):
     __tablename__ = 'device'
     id = Column(String(20), primary_key=True)
@@ -48,6 +49,16 @@ class Device(Base):
         self.status = status
         session.add(self)
         session.commit()
+
+    @property
+    def serialize(self):
+        return {
+            'id': self.id,
+            'status': self.status,
+            'aircon': self.aircon,
+            'totalTime': self.totalTime,
+            'last_update': self.last_update
+        }
 
 
 Base.metadata.create_all(engine)
