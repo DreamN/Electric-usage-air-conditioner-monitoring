@@ -43,12 +43,22 @@ class Device(Base):
             self.totalTime += timediff
             self.last_update = datetime.datetime.now()
         elif(not self.status and status and aircon):      #if status off -> on aircon on then update 
-            print("if aircon on then update ")
+            print("if status on and aircon already on then update ")
             self.last_update = datetime.datetime.now()
+        elif(self.status and not self.aircon and aircon):
+            print("if status already on and aircon on then update ")
+            self.last_update = datetime.datetime.now()           
         self.aircon = aircon
         self.status = status
         session.add(self)
         session.commit()
+
+    def current_Total(self):
+        current_Total = self.totalTime
+        if self.aircon and self.status:
+            timediff = dt_to_minutes(datetime.datetime.now() - self.last_update)
+            current_Total += timediff
+        return current_Total
 
     @property
     def serialize(self):
@@ -56,7 +66,7 @@ class Device(Base):
             'id': self.id,
             'status': self.status,
             'aircon': self.aircon,
-            'totalTime': self.totalTime,
+            'totalTime': self.current_Total(),
             'last_update': self.last_update
         }
 
