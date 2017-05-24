@@ -40,3 +40,36 @@
     </div>
 
 {% endblock %}
+
+{% block script %}
+<script type="text/javascript">
+
+    (function updateData() {
+        $.ajax({
+            url: '/json', 
+            success: function (data) {
+                console.log('Got Data...')
+                console.log(data)
+                $('tbody').empty();
+                for (var d in data) {
+                    $('tbody').append(`
+                        <tr>
+                            <td>` + data[d].id + `</td>
+                            <td>` + data[d].status + `</td>
+                            <td>` + data[d].aircon + `</td>
+                            <td>` + data[d].totalTime + `</td>
+                            <td>` + data[d].last_update + `</td>
+                        </tr>
+                    `   );
+                }
+            },
+
+            complete: function() {
+                // Schedule
+                setTimeout(updateData, 3000);
+            }
+        });
+    })();
+
+</script>
+{% endblock %}
