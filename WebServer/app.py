@@ -50,7 +50,11 @@ def UpdateStatus():
 @app.route('/json')
 def GetJsonData():
     devices = session.query(Device).all()
-    data = {'summary': 'dummy', 'raw': {device.id : device.serialize for device in devices}}
+    sumaircon = 0
+    for device in devices:
+        if device.aircon:
+            sumaircon += 1
+    data = {'summary': {'aircon_usage' : sumaircon,'total': len(devices)}, 'raw': {device.id : device.serialize for device in devices}}
     return jsonify(data)
 
 
@@ -85,4 +89,4 @@ def RegisterPage():
 #|                  Start-Up Statement                 +#
 #+-----------------------------------------------------+#
 if __name__ == "__main__":
-    app.run(debug=True, host='0.0.0.0', port=8080,)# threaded=True)
+    app.run(debug=True, host='0.0.0.0', port=8080, threaded=True)

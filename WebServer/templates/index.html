@@ -1,10 +1,13 @@
 {% extends "base.html" %}
+{% block style %}
+    <link rel="stylesheet" href="/css/c3.css">
+{% endblock %}
 {% block title %}Dashboard{% endblock %}
 {% block content %}
     <h1 class="title is-1">
         Dashboard: EUCM
     </h1>
-    <div class="graph"></div>
+    <div id="graph"></div>
     <div class="box">
         <table class="table">
             <thead>
@@ -46,6 +49,30 @@
 <script src="./js/d3.v3.min.js" charset="utf-8"></script>
 <script src="./js/c3.min.js" charset="utf-8"></script>
 <script type="text/javascript">
+    var data_buff = [];
+    //Initial Graph
+    var graph = c3.generate({
+        bindto: '#graph',
+        data: {
+            json: [],
+            keys: {
+                x: 'time',
+                value: ['aircon_usage']
+            },
+            names: {
+                value: 'Air Conditioner Usage'
+            },
+            types: {
+                aircon_usage: 'area',
+            },
+        },
+        axis: {
+            x: {
+                type: 'timeseries',
+                tick: { format: '%H:%M:%S' }
+            }
+        },
+    });
 
     (function updateData() {
         $.ajax({
@@ -55,6 +82,24 @@
                 console.log(data)
                 $('tbody').empty();
                 var ddata = data['raw'];
+                var gdata = data['summary'];
+                
+                //Data Graph
+                data_buff.push({
+                    time: new Date(), aircon_usage: data['summary']['aircon_usage']
+                });
+                graph.axis.max(parseInt(data['summary']['total']));
+                graph.axis.min(0);
+                graph.load({
+                    json: data_buff.slice(Math.max(data_buff.length - 20, 1)),
+                    keys: {
+                        x: 'time',
+                        value: ['aircon_usage']
+                    },
+                    x: 'time'
+                });
+
+                //Data Table
                 for (var d in ddata) {
                     $('tbody').append(`
                         <tr>
@@ -70,7 +115,7 @@
 
             complete: function() {
                 // Schedule
-                setTimeout(updateData, 3000);
+                setTimeout(updateData, 1000);
             }
         });
     })();
