@@ -4,6 +4,7 @@
     <h1 class="title is-1">
         Dashboard: EUCM
     </h1>
+    <div class="graph"></div>
     <div class="box">
         <table class="table">
             <thead>
@@ -42,6 +43,8 @@
 {% endblock %}
 
 {% block script %}
+<script src="./js/d3.v3.min.js" charset="utf-8"></script>
+<script src="./js/c3.min.js" charset="utf-8"></script>
 <script type="text/javascript">
 
     (function updateData() {
