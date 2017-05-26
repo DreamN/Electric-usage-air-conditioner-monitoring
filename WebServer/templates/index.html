@@ -54,14 +54,15 @@
                 console.log('Got Data...')
                 console.log(data)
                 $('tbody').empty();
-                for (var d in data) {
+                var ddata = data['raw'];
+                for (var d in ddata) {
                     $('tbody').append(`
                         <tr>
-                            <td>` + data[d].id + `</td>
-                            <td>` + data[d].status + `</td>
-                            <td>` + data[d].aircon + `</td>
-                            <td>` + data[d].totalTime + `</td>
-                            <td>` + data[d].last_update + `</td>
+                            <td>` + ddata[d].id + `</td>
+                            <td>` + ddata[d].status + `</td>
+                            <td>` + ddata[d].aircon + `</td>
+                            <td>` + ddata[d].totalTime + `</td>
+                            <td>` + ddata[d].last_update + `</td>
                         </tr>
                     `   );
                 }

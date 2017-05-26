@@ -50,7 +50,9 @@ def UpdateStatus():
 @app.route('/json')
 def GetJsonData():
     devices = session.query(Device).all()
-    return jsonify({device.id : device.serialize for device in devices})
+    data = {'summary': 'dummy', 'raw': {device.id : device.serialize for device in devices}}
+    return jsonify(data)
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def RegisterPage():
@@ -83,4 +85,4 @@ def RegisterPage():
 #|                  Start-Up Statement                 +#
 #+-----------------------------------------------------+#
 if __name__ == "__main__":
-    app.run(debug=True, host='0.0.0.0', port=8080, threaded=True)
+    app.run(debug=True, host='0.0.0.0', port=8080,)# threaded=True)
