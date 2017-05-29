@@ -1,4 +1,4 @@
-# Electric Usage Conditioner Monitoring 
+# Electric Usage Air Conditioner Monitoring 
 This project was submitted to Embedded System subject, 2/2016
 
 Department of Computer Engineering, Faculty of Engineering, King
